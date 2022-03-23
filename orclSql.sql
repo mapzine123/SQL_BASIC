@@ -135,8 +135,36 @@ SELECT ename, sal
     WHERE ename LIKE 'S%'; -- 와일드카드 사용
     
 
+SELECT ename
+    FROM emp
+    WHERE ename LIKE '_M%'; -- result : SMITH
     
+SELECT ename
+    FROM emp
+    WHERE ename LIKE '%T'; -- result : SCOTT
+
+SELECT ename
+    FROM emp
+    WHERE ename LIKE '%A%'; -- 이름에 A가 포함된 모든 사람
     
+SELECT ename, comm
+    FROM emp
+    WHERE comm is null; -- comm이 NULL인 모든 값 출력
+    
+SELECT ename, sal ,job
+    FROM emp
+    WHERE job in ('SALESMAN', 'ANALYST', 'MANAGER'); -- in : 여러 조건을 검색가능
+    
+SELECT ename, sal, job
+    FROM emp
+    WHERE (job = 'SALESMAN' or job = 'ANALYST' or job = 'MANAGER'); -- 위의 예제와 똑같은 효과
+    
+SELECT ename, sal, job
+    FROM emp
+    WHERE job NOT in ('SALESMAN', 'ANALYST', 'MANAGER'); -- NOT 이용해 필터링
+
+
+
     
     
     
