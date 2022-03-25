@@ -163,29 +163,167 @@ SELECT ename, sal, job
     FROM emp
     WHERE job NOT in ('SALESMAN', 'ANALYST', 'MANAGER'); -- NOT 이용해 필터링
 
+/*
+    UPPER : 다 대문자
+    LOWER : 다 소문자
+    INITCAP : 첫글자 대문자, 나머지 소문자
+*/
+
+SELECT UPPER(ename), LOWER(ename), INITCAP(ename)
+    FROM emp;
+    
+SELECT ENAME, SAL
+    FROM emp
+    WHERE LOWER(ename)='scott'; -- 데이터가 대문자인지 소문자인지 모를때 활용 가능
+    
+SELECT SUBSTR('SMITH', 1, 3) -- startIdx : 1 ( 0이 아님 ) 
+    FROM DUAL;               -- result : SMI ( 문자열 추출 )
+    
+SELECT ename, LENGTH(ename) -- ename의 글자 수 추출
+    FROM emp;
+    
+SELECT LENGTHB('가나다라마') -- byte길이 추출
+    FROM DUAL;
+
+SELECT INSTR('SMITH', 'M') -- 문자에서 특정 철자의 위치 출력 (SQL은 startIdx가 1)
+    FROM DUAL;             -- result : 2
+    
+SELECT INSTR('abcdefg@naver.com', '@') -- naver.com만 추출하고 싶다면?
+    FROM DUAL;
+
+SELECT SUBSTR('abcdefg@naver.com', INSTR('abcdefg@naver.com', '@') + 1, LENGTH('abcdefg@naver.com'))
+    FROM DUAL;
+    
+-- REPLACE : 특정 철자를 다른 철자로 변경
+-- REGEXP_REPLACE : 정규식 함수, 더 복잡한 형태의 검색 패턴으로 데이터 조회 가능
+SELECT ename, REPLACE(sal, 0, '*')
+    FROM emp;
+SELECT ename, REGEXP_REPLACE(sal, '[0-3]', '*') as SALARY
+    FROM emp;
+    
+SELECT REPLACE(ENAME, SUBSTR(ENAME, 2, 1), '*') as "전광판_이름"
+    FROM emp;    
+    
+    
+    
+-- LPAD : 왼쪽에 특정 철자를 N개 만큼 채우기
+-- RPAD : 오른쪽에 특정 철자를 N개 만큼 채우기
+SELECT ename, LPAD(sal, 10, '*') as salary1, RPAD(sal, 10, '*') as salary2
+    FROM emp;
+
+SELECT ename, sal, LPAD('■', round(sal/100), '■') as bar_chart
+    FROM emp; -- PAD를 이용한 데이터 시각화
+
+    --     TRIM : 양쪽 공백제거
+    --     RTRIM : 오른쪽 공백 제거 + 오른쪽에서 반복문자 제거
+    --     LTRIM : 왼쪽 공백 제거 + 왼쪽에서 반복문자 제거
+
+SELECT 'smith', LTRIM('smith','s'), RTRIM('smith','h'), TRIM('s' from 'smiths')
+    FROM dual;
+  
+-- ROUND : 반올림해서 출력하기 ROUND(반올림 할 숫자, 반올림 할 자리)
+SELECT '876.567' as 숫자, ROUND(876.567, 1)
+    FROM dual;
+
+-- TRUNC : 버림해서 출력하기
+SELECT '876.567' as 숫자, TRUNC(876.567, 1)
+    FROM dual;
+    
+-- MOD : 나눈 나머지 값 출력
+SELECT MOD(10, 3)
+    FROM DUAL;
+
+SELECT empno, MOD(empno, 2)
+    FROM emp;
+
+SELECT empno, ename
+    FROM emp   
+    WHERE MOD(empno, 2) = 0;
+    
+-- FLOOR : 몫 출력
+SELECT FLOOR(10 / 3)   
+    FROM DUAL;
+
+-- MONTHS_BETWEEN : 날짜 간 개월 수 출력
+SELECT ename, MONTHS_BETWEEN(sysdate, hiredate)
+    FROM emp;
+    
+-- ADD_MONTHS : 개월 수 더한 날짜 출력
+SELECT ADD_MONTHS(TO_DATE('2019-05-01', 'RRRR-MM-DD'), 100)
+    FROM DUAL;
+
+SELECT TO_DATE('2019-05-01', 'RRRR_MM-DD') + 100
+    FROM DUAL;
+
+SELECT TO_DATE('2019-05-01', 'RRRR-MM-DD') + INTERVAL '100' MONTH
+    FROM DUAL;
+
+-- NEXT_DAY : 특정 날짜 뒤에 오는 요일 날짜 출력
+SELECT '2022/03/26' as 날짜, NEXT_DAY('2022/03/26', '수')
+    FROM DUAL;
+    
+-- LAST_DAY : 특정 날짜가 있는 달의 마지막 날
+SELECT '2019/05/22' as 날짜, LAST_DAY('2019/05/22') as "마지막 날짜"
+    FROM DUAL;
+    
+SELECT LAST_DAY(SYSDATE) - SYSDATE as "남은 날짜"
+    FROM DUAL;
+    
+SELECT ename, hiredate, ROUND(SYSDATE - hiredate) as "경력"
+    FROM emp
+    WHERE ename = 'KING';
+    
+SELECT ename, TO_CHAR(hiredate, 'DAY') as 요일, TO_CHAR(sal, '999,999') as 월급
+    FROM emp
+    WHERE ename = 'SCOTT';
+
+-- IF 문을 SQL로 구현
+    
+SELECT ename, deptno, DECODE(deptno, 10, 300, 20, 400, 0) as 보너스
+    FROM emp;
+    
+SELECT ename, job, sal, CASE 
+    WHEN sal >= 3000 THEN 500
+    WHEN sal >= 2000 THEN 300
+    WHEN sal >= 1000 THEN 200
+    ELSE 0 END AS BONUS
+    FROM emp
+    WHERE job IN ('SALESMAN', 'ANALYST');
+    
+SELECT ename, job, comm, CASE  
+    WHEN comm IS NULL THEN 500
+    ELSE 0 END BONUS
+    FROM emp
+    WHERE job IN ('SALESMAN', 'ANALYST');
+
+-- MAX : 최대값 출력
+SELECT MAX(sal)
+    FROM emp;
+
+SELECT MAX(sal)
+    FROM emp
+    WHERE job = 'SALESMAN';
 
 
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     
     
     
